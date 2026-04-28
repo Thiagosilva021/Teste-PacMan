@@ -8,20 +8,34 @@ float boca = 0.0;
 float velocidade = 0.03;
 float direcao;
 
+//Coordenadas do quadrado comido
+float pontoX = 0.3;
+float pontoY = 0.2;
+int pontoComido = 0;
+
 // FANTASMA
 
 void quadrado(){
+    //Faz o quadrado sumir
+    if(pontoComido) return;
+
+    glColor3ub(255, 255, 255);
+
     glBegin(GL_QUADS);
-        glVertex2f(-0.005, -0.005);
-        glVertex2f(0.005, -0.005);
-        glVertex2f(0.005, 0.005);
-        glVertex2f(-0.005, 0.005);
+        glVertex2f(pontoX - 0.01, pontoY - 0.01);
+        glVertex2f(pontoX + 0.01, pontoY - 0.01);
+        glVertex2f(pontoX + 0.01, pontoY + 0.01);
+        glVertex2f(pontoX - 0.01, pontoY + 0.01);
     glEnd();
 }
 
 // PACMAN
 
 void pacMan(){
+
+    // Logica central: calculando a distância entre dois pontos
+
+
     glColor3ub(255, 255, 0);
     glBegin(GL_TRIANGLE_FAN);
         glVertex2f(xPOS, yPOS);
@@ -58,6 +72,16 @@ void moverQuadrado(unsigned char key, int a, int b){
     if(xPOS < -limite) xPOS = -limite;
     if(yPOS > limite) yPOS = limite;
     if(yPOS < -limite) yPOS = -limite;
+
+
+
+    float dx = xPOS - pontoX;
+    float dy = yPOS - pontoY;
+    float distancia = sqrt(dx*dx + dy*dy);
+
+    if(distancia < 0.06){
+        pontoComido = 1;
+    }
 
     glutPostRedisplay();
 
